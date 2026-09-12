@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gate Review Dashboard — <Project Name></title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --panel: #ffffff;
+    --border: #e2e5ea;
+    --text: #1c2127;
+    --muted: #6b7280;
+    --approved: #1a7f37;
+    --approved-bg: #e6f4ea;
+    --rejected: #b42318;
+    --rejected-bg: #fbe9e7;
+    --pending: #9a6700;
+    --pending-bg: #fff6e0;
+    --accent: #2563eb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 8px; }
+  .card .value { font-size: 28px; font-weight: 600; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  th { background: #fafbfc; color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge.approved { color: var(--approved); background: var(--approved-bg); }
+  .badge.rejected { color: var(--rejected); background: var(--rejected-bg); }
+  .badge.pending { color: var(--pending); background: var(--pending-bg); }
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 15px; font-weight: 600; margin: 0 0 10px; }
+</style>
+</head>
+<body>
+  <h1>Gate Review Dashboard</h1>
+  <div class="subtitle"><Project Name> — Single source of truth for Gate 1 (Spec Review) and Gate 2 (Code Review) status, synchronized with .ai-context/status.md, spec files, and .ai-context/pr_reviews/</div>
+
+  <div class="grid">
+    <div class="card"><h2>Active Specs</h2><div class="value">0</div></div>
+    <div class="card"><h2>Gate 1 Pending</h2><div class="value">0</div></div>
+    <div class="card"><h2>Gate 2 Pending</h2><div class="value">0</div></div>
+    <div class="card"><h2>Released Specs</h2><div class="value">0</div></div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">Gate 1 — Spec Peer Reviews</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Spec ID</th>
+          <th>Feature</th>
+          <th>Developer</th>
+          <th>Reviewer</th>
+          <th>Status</th>
+          <th>Date/Time</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="7" style="color:var(--muted); text-align:center;">No Gate 1 reviews recorded yet</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <p class="section-title">Gate 2 — Code Reviews</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Spec ID</th>
+          <th>Feature</th>
+          <th>Developer</th>
+          <th>Reviewer</th>
+          <th>Status</th>
+          <th>Date/Time</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="7" style="color:var(--muted); text-align:center;">No Gate 2 reviews recorded yet</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--
+    Example badge usage when populating rows:
+    <span class="badge approved">Approved</span>
+    <span class="badge rejected">Rejected</span>
+    <span class="badge pending">Changes Requested</span>
+  -->
+</body>
+</html>
