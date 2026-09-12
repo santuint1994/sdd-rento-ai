@@ -22,10 +22,10 @@ JWT (access/refresh tokens)
 Unknown / TBD
 
 ## Gate 1 Reviewer(s)
-Supratim Jetty (supratim.jetty@intglobal.com)
+Supratim Jetty (sjetty786@gmail.com)
 
 ## Gate 2 Reviewer(s)
-Supratim Jetty (supratim.jetty@intglobal.com)
+Supratim Jetty (sjetty786@gmail.com)
 
 ## BRD Status
 Ingested. Source: `docs/Rento BRD.pdf` (Rento BRD — Draft v1.0, 6 September 2026). Authoritative baseline: `.ai-context/BRD.md`. See `.ai-context/brd-change-log.md` for ingestion history.
