@@ -56,3 +56,19 @@
   - Feature spec drafting (`.spec.md`) is now formally unlocked.
   - Created dedicated PR review record artifact: `.ai-context/pr_reviews/GATE0-BRD-Baseline-v1.1-20260913-001915.md`.
   - Synchronized outcome across 5 repository artifacts: `.ai-context/pr_reviews/`, `.ai-context/dashboard.html`, `.ai-context/BRD.md`, `.ai-context/status.md`, and `.ai-context/prompt_history.md`.
+
+## 2026-09-13 — Spec Generation Resumed: Authentication & Session
+- **Prompt:** `continue specs generation`
+- **Outcome:** With `BRD-Baseline-v1.1` now Gate 0 Approved, resumed feature spec drafting. Authored `.ai-context/specs/auth.spec.md` (Authentication & Session) derived from BRD-001, BRD-002, BRD-003, covering signup, login, OTP-based password recovery, logout, and session expiry (11 Acceptance Criteria, 6 API contract endpoints, 13 unit test cases). Set status to `In Peer Review` and assigned Supratim Jetty (supratim.jetty@intglobal.com) as Gate 1/Gate 2 reviewer per `.ai-context/project_context.md`. Updated `.ai-context/status.md` Active Specs table accordingly.
+
+## 2026-09-13 — Full Spec Batch Generation (Remaining 7 Modules)
+- **Prompt:** `continue generate all specs`
+- **Outcome:** Authored the remaining 7 module specs to cover every requirement in the BRD Traceability Matrix, all derived directly from `.ai-context/BRD.md` and the module boundaries in `.ai-context/architecture.md`:
+  - `access-control.spec.md` (BRD-017, R23) — landlord-account administration, role assignment, and the cross-cutting role-scoping middleware contract consumed by every other module.
+  - `account.spec.md` (BRD-004) — own-profile view/edit.
+  - `dashboard.spec.md` (BRD-005) — read-only portfolio summary aggregation, landlord-scoped and admin cross-landlord variants.
+  - `shops.spec.md` (BRD-006, 007, 008, 009, 011, 012) — Shop onboarding wizard (Shop+Tenant+Agreement in one transaction), detail/edit/search/close/delete, tenant lookup, agreement history/creation.
+  - `rooms.spec.md` (BRD-010) — independent Room CRUD with occupancy filtering.
+  - `billing.spec.md` (BRD-013, 014) — electric bill calculation (R08/R09/R06) and global service-rate configuration.
+  - `payments.spec.md` (BRD-015, 016) — payment capture settling a bill (R22), payment history, admin cross-landlord read.
+  - All 8 specs (including `auth`) are now set to `In Peer Review` and submitted for parallel, non-blocking Gate 1 Spec Peer Review under reviewer Supratim Jetty (`supratim.jetty@intglobal.com`), per `.ai-context/project_context.md`. Updated `.ai-context/status.md` Active Specs table and daily log accordingly. No `.plan.md`, `.tasks.md`, or implementation code was generated for any spec — Gate 1 approval is required first per the Mandatory Lifecycle Rules.

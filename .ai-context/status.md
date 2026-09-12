@@ -7,12 +7,22 @@ _Last updated: 2026-09-13_
 | Spec ID | Feature | Status | Gate 1 | Gate 2 | Developer | Last Updated |
 |---|---|---|---|---|---|---|
 | `BRD-Baseline-v1.1` | Revised Requirement Baseline & Module Architecture (Super-Admin RBAC) | `Approved` | Approved | - | Unassigned | 2026-09-13 |
+| `auth` | Authentication & Session | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `access-control` | Access Control & Role Management | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `account` | Account & Settings | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `dashboard` | Dashboard | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `shops` | Shop, Tenant & Agreement Management | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `rooms` | Room Management | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `billing` | Billing Configuration | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `payments` | Payments & History | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
 
 ## Daily Execution Log
 
 ### 2026-09-13
 - **`architecture-approval`**: User formally confirmed approval of the updated Architecture ([`.ai-context/architecture.md`](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/architecture.md)) and Constitution ([`.ai-context/constitution.md`](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/constitution.md)) baseline.
 - **`gate-0-approval`**: Conducted formal Gate 0 PR Review for revised baseline `BRD-Baseline-v1.1` (BRD-001 through BRD-017 including Super-Admin RBAC amendment). Assigned reviewer Supratim Jetty (`supratim.jetty@intglobal.com`) granted **`Approved`** status. Created dedicated review record `GATE0-BRD-Baseline-v1.1-20260913-001915.md` and updated `dashboard.html`, `BRD.md`, `status.md`, and `prompt_history.md`.
+- **`auth`**: Authored feature spec [`.ai-context/specs/auth.spec.md`](.ai-context/specs/auth.spec.md) (Authentication & Session — BRD-001, BRD-002, BRD-003) now that Gate 0 is Approved. Set status to `In Peer Review` and submitted for Gate 1 Spec Peer Review (reviewer: Supratim Jetty, `supratim.jetty@intglobal.com`).
+- **`specs-batch`**: Authored the remaining 7 module specs covering the full BRD traceability matrix: `access-control.spec.md` (BRD-017), `account.spec.md` (BRD-004), `dashboard.spec.md` (BRD-005), `shops.spec.md` (BRD-006/007/008/009/011/012 — Shop+Tenant+Agreement), `rooms.spec.md` (BRD-010), `billing.spec.md` (BRD-013/014), `payments.spec.md` (BRD-015/016). All set to `In Peer Review` and submitted for Gate 1 (reviewer: Supratim Jetty, `supratim.jetty@intglobal.com`). All 8 specs (including `auth`) are now in parallel, non-blocking Gate 1 review.
 - **`gate-0-review`**: Conducted formal Gate 0 BRD & Module Architecture PR Review. Assigned reviewer Supratim Jetty (`supratim.jetty@intglobal.com`) marked `BRD-Baseline` as **`Rejected`** (*"Test the BRD properly and send back again"*). Created dedicated review record `GATE0-BRD-Baseline-20260913-000800.md` and updated `dashboard.html`, `BRD.md`, `status.md`, and `prompt_history.md`.
 
 ### 2026-09-12
