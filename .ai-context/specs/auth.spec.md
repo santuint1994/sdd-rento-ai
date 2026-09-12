@@ -4,7 +4,7 @@
 auth
 
 ## Status
-In Peer Review
+Approved
 
 ## Roles & Assignments
 - **Developer:** Unassigned
@@ -19,7 +19,7 @@ In Peer Review
 ## Gate Approvals & History
 | Gate | Approver Name | Approver Email/ID | Date/Time | Outcome | Approval Comment / Summary |
 |---|---|---|---|---|---|
-| Gate 1 (Spec Review) | Supratim Jetty | supratim.jetty@intglobal.com | — | Pending | Awaiting Gate 1 Spec Peer Review |
+| Gate 1 (Spec Review) | Supratim Jetty | supratim.jetty@intglobal.com | 2026-09-13 01:15:15 | APPROVED | auth.spec.md (Authentication & Session) formally approved at Gate 1 Spec Peer Review. See dedicated review record: [GATE1-auth-20260913-011515.md](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/pr_reviews/GATE1-auth-20260913-011515.md) |
 | Gate 2 (Code Review) | Supratim Jetty | supratim.jetty@intglobal.com | — | Pending | Not started |
 
 ## Intent

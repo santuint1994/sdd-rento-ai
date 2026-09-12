@@ -72,3 +72,10 @@
   - `billing.spec.md` (BRD-013, 014) — electric bill calculation (R08/R09/R06) and global service-rate configuration.
   - `payments.spec.md` (BRD-015, 016) — payment capture settling a bill (R22), payment history, admin cross-landlord read.
   - All 8 specs (including `auth`) are now set to `In Peer Review` and submitted for parallel, non-blocking Gate 1 Spec Peer Review under reviewer Supratim Jetty (`supratim.jetty@intglobal.com`), per `.ai-context/project_context.md`. Updated `.ai-context/status.md` Active Specs table and daily log accordingly. No `.plan.md`, `.tasks.md`, or implementation code was generated for any spec — Gate 1 approval is required first per the Mandatory Lifecycle Rules.
+
+## 2026-09-13 — Gate 1 Approval of Authentication & Session Spec (`auth.spec.md`)
+- **Prompt:** `/pr-gate-workflow`
+- **Outcome:** Executed `/pr-gate-workflow`. Validated reviewer identity (`Supratim Jetty`, `supratim.jetty@intglobal.com`). Conducted formal Gate 1 Spec Peer Review for feature spec `auth.spec.md` (BRD-001, BRD-002, BRD-003). Assigned reviewer granted **`Approved`** status.
+  - Development for feature `auth` is now formally unlocked.
+  - Created dedicated PR review record artifact: `.ai-context/pr_reviews/GATE1-auth-20260913-011515.md`.
+  - Synchronized outcome across 5 repository artifacts: `.ai-context/pr_reviews/`, `.ai-context/dashboard.html`, `.ai-context/specs/auth.spec.md`, `.ai-context/status.md`, and `.ai-context/prompt_history.md`.

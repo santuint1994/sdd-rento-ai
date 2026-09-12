@@ -7,7 +7,7 @@ _Last updated: 2026-09-13_
 | Spec ID | Feature | Status | Gate 1 | Gate 2 | Developer | Last Updated |
 |---|---|---|---|---|---|---|
 | `BRD-Baseline-v1.1` | Revised Requirement Baseline & Module Architecture (Super-Admin RBAC) | `Approved` | Approved | - | Unassigned | 2026-09-13 |
-| `auth` | Authentication & Session | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
+| `auth` | Authentication & Session | `Approved` | Approved | Not Started | Unassigned | 2026-09-13 |
 | `access-control` | Access Control & Role Management | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
 | `account` | Account & Settings | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
 | `dashboard` | Dashboard | `In Peer Review` | Pending | Not Started | Unassigned | 2026-09-13 |
