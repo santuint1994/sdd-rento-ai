@@ -4,7 +4,8 @@
 - **Document:** Rento BRD — Draft v1.0, 6 September 2026
 - **Location:** `docs/Rento BRD.pdf`
 - **Status:** Single authoritative source document (no competing versions found under `docs/`).
-- **Note on repository scope:** This BRD specifies the full Rento product — a React Native landlord mobile app (Section 05) — and explicitly places "Backend service, database, and hosting infrastructure" under Out of Scope for the document itself (Section 03), noting it is "defined separately from this app." This repository (`Rento`, Backend Only, Monolithic Node.js + Express + PostgreSQL/Sequelize) **is** that separately-defined backend. Section 27 (API & Integration Requirements) is therefore this repository's direct functional contract, and Sections 06–21 are the business context that contract must satisfy.
+## Gate Approvals & History
+- **2026-09-13 (Gate 0 BRD Review):** **REJECTED** by Supratim Jetty (`supratim.jetty@intglobal.com`). Feedback: *"Test the BRD properly and send back again"*. See dedicated review record: [GATE0-BRD-Baseline-20260913-000800.md](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/pr_reviews/GATE0-BRD-Baseline-20260913-000800.md).
 
 ## Objective
 Rento lets a landlord who rents out commercial shops and residential rooms manage the full rental lifecycle from a single mobile app: onboarding a shop with its tenant and rental terms in one guided flow, tracking rooms/tenants/agreements, recording electricity-meter-based utility bills against a configurable rate, collecting rent and bill payments, formally closing out a shop when a tenancy ends, and monitoring the portfolio via a summary dashboard.
