@@ -6,6 +6,7 @@
 - **Status:** Single authoritative source document (no competing versions found under `docs/`).
 ## Gate Approvals & History
 - **2026-09-13 (Gate 0 BRD Review):** **REJECTED** by Supratim Jetty (`supratim.jetty@intglobal.com`). Feedback: *"Test the BRD properly and send back again"*. See dedicated review record: [GATE0-BRD-Baseline-20260913-000800.md](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/pr_reviews/GATE0-BRD-Baseline-20260913-000800.md).
+- **2026-09-13 (BRD Amendment — Role Management):** Added Super-Admin role and role-based access control at stakeholder request. This requirement is **not present in the source document** (`docs/Rento BRD.pdf`); it is a confirmed baseline amendment pending inclusion in a future client BRD revision. See [brd-change-log.md](brd-change-log.md) for the full delta and impact analysis. This change requires Gate 1 re-review before any dependent specs/architecture proceed.
 
 ## Objective
 Rento lets a landlord who rents out commercial shops and residential rooms manage the full rental lifecycle from a single mobile app: onboarding a shop with its tenant and rental terms in one guided flow, tracking rooms/tenants/agreements, recording electricity-meter-based utility bills against a configurable rate, collecting rent and bill payments, formally closing out a shop when a tenancy ends, and monitoring the portfolio via a summary dashboard.
@@ -22,11 +23,12 @@ Rento lets a landlord who rents out commercial shops and residential rooms manag
 - Rent/bill payment capture and payment history.
 - Portfolio dashboard with summary metrics.
 - Account screens: login, sign-up, OTP verification, password recovery, profile, settings.
+- **Role management (added 2026-09-13, see Gate Approvals & History):** Two fixed roles — **Landlord/Owner** (existing, unchanged: full access scoped to their own portfolio) and **Super-Admin** (new, platform-level: full CRUD access across every landlord's data plus landlord-account and role administration). Permissions are a fixed matrix per role — not user-configurable. See Actors & Role Management below.
 - **This repository's scope:** the backend REST API, data persistence (PostgreSQL + Sequelize), and business logic serving all of the above.
 
 ### Out of Scope
 - A tenant-facing login or app — tenants are records, not app users.
-- Multi-landlord or staff accounts with role-based permissions.
+- Landlord-created staff/sub-accounts with custom or configurable permissions (e.g. a landlord inviting their own employees) — only the fixed Super-Admin and Landlord/Owner roles are in scope.
 - Online payment gateway integration.
 - Push, SMS, or email notification delivery.
 - Multi-language / localization support.
@@ -36,21 +38,27 @@ Rento lets a landlord who rents out commercial shops and residential rooms manag
 ## Actors
 | Role | Responsibilities | App Access |
 |---|---|---|
-| Landlord / Property Owner | Adds and manages shops, rooms, tenants, agreements, billing, and payments; reviews the portfolio dashboard. | Full access to every module. |
+| Super-Admin | Platform-level administrator. Creates and manages landlord accounts, assigns/revokes roles, and has full oversight (view + edit) of every landlord's shops, rooms, tenants, agreements, bills, and payments for support/administration purposes. | Full access to every module, across all landlord accounts. |
+| Landlord / Property Owner | Adds and manages shops, rooms, tenants, agreements, billing, and payments; reviews the portfolio dashboard. | Full access to every module, scoped to their own account only. |
 | Tenant | Occupies a shop or room under an agreement; contact and identity details are recorded against the shop/room they occupy. | None — no tenant-facing surface; data record only. |
 
 ### Role & Permission Matrix
-| Module | View | Create | Edit | Close / Delete |
-|---|---|---|---|---|
-| Shops | Y | Y | Y | Y |
-| Rooms | Y | Y | Y | Y |
-| Tenants | Y | Via shop onboarding | — | — |
-| Agreements | Y | Y | — | — |
-| Bills / Service Rate | Y | Y | — | — |
-| Payments | Y | Y | — | — |
-| Profile / Settings | Y | — | Y | Logout |
+Two fixed roles now exist — permissions are not user-configurable (Section 22, amended 2026-09-13):
 
-- A single "Landlord" role; no differentiated permission levels (Section 22).
+| Module | Super-Admin | Landlord/Owner |
+|---|---|---|
+| Landlord Accounts | Create, view, edit, deactivate — any landlord account | View/edit own account only (via Profile) |
+| Role Assignment | Assign/revoke roles for any account | None |
+| Shops | View/Create/Edit/Close/Delete — all landlords | View/Create/Edit/Close/Delete — own only |
+| Rooms | View/Create/Edit/Delete — all landlords | View/Create/Edit/Delete — own only |
+| Tenants | View — all landlords | View; Create via shop onboarding — own only |
+| Agreements | View — all landlords | View, Create — own only |
+| Bills / Service Rate | View — all landlords | View, Create — own only |
+| Payments | View — all landlords | View, Create — own only |
+| Profile / Settings | Manage own Super-Admin profile | View, Edit own, Logout |
+
+- Prior baseline ("a single Landlord role; no differentiated permission levels") is superseded by this amendment — see [Gate Approvals & History](#gate-approvals--history) and [brd-change-log.md](brd-change-log.md).
+- Super-Admin's platform-wide visibility is **view/manage for oversight and account administration**; it does not change the day-to-day authoring flows, which remain landlord-scoped.
 
 ## Functional Requirements
 Stable IDs below map 1:1 to the BRD's own Traceability Matrix (Section 33, `REQ01`–`REQ16`), preserved here as `BRD-001`–`BRD-016` for this project's SDD lifecycle. Do not renumber on future BRD revisions — see `.ai-context/brd-change-log.md`.
@@ -73,6 +81,9 @@ Stable IDs below map 1:1 to the BRD's own Traceability Matrix (Section 33, `REQ0
 | BRD-014 | Global service-rate configuration (electric rate, late charge) | Billing Configuration | Service Rate Config |
 | BRD-015 | Payment capture & receipt | Payments & History | Payment |
 | BRD-016 | Payment history & combined activity log | Payments & History | Payment |
+| BRD-017 | Role-based access control: Super-Admin and Landlord/Owner roles, landlord account administration | Access Control & Role Management | Landlord, Super-Admin |
+
+*BRD-017 added 2026-09-13 — see Gate Approvals & History and [brd-change-log.md](brd-change-log.md). Not present in the original source document.*
 
 ## Backend API Contract (Section 27 — direct functional contract for this repository)
 | Method & Path | Purpose |
@@ -93,9 +104,13 @@ Stable IDs below map 1:1 to the BRD's own Traceability Matrix (Section 33, `REQ0
 | `GET/PUT /service-rate` | Global electric rate / late charge configuration |
 | `POST /payments` · `GET /payments` | Record and list payments |
 | `GET /dashboard/summary` | Metric values for the Home dashboard |
+| `GET /admin/landlords` · `POST /admin/landlords` | Super-Admin: list and create landlord accounts |
+| `GET/PUT /admin/landlords/:id` · `PUT /admin/landlords/:id/status` | Super-Admin: view/edit a landlord account, activate/deactivate |
+| `PUT /admin/landlords/:id/role` | Super-Admin: assign/revoke a role |
+| `GET /admin/shops` · `GET /admin/payments` · `GET /admin/dashboard/summary` | Super-Admin: cross-landlord read access for oversight (mirrors the landlord-scoped endpoints above, unscoped) |
 
 ## Business Data Model (Section 21)
-- **Landlord** owns Shops and Rooms.
+- **Landlord** owns Shops and Rooms. Has a `role` attribute: `landlord` (default, own-scoped) or `super_admin` (platform-scoped, added 2026-09-13). Super-Admin accounts are still represented as Landlord records with the elevated role, not a separate top-level entity — unless architecture review determines a separate `Account`/`User` entity is warranted.
 - **Shop**: email, shop type, description, medium, logo, name, rent/month, category. Has history of Agreements, is occupied by a Tenant, accrues Bills.
 - **Room**: room number, size, company, owner, photo, attachment.
 - **Agreement**: period, start date, end date, rent/month, pay period, security deposit, late charges, electrical flag, status, attachment.
@@ -129,7 +144,8 @@ Stable IDs below map 1:1 to the BRD's own Traceability Matrix (Section 33, `REQ0
 | Token attachment | The session token is attached to every request made on the landlord's behalf |
 | Session expiry | An expired or invalid session requires re-authentication |
 | Logout | Clears the stored session and any cached account data |
-| Roles | A single "Landlord" role; no differentiated permission levels |
+| Roles | Two fixed roles: `landlord` (default, own-scoped) and `super_admin` (platform-scoped). Permissions are a fixed matrix per role, not user-configurable — see Actors & Role & Permission Matrix above. **Amended 2026-09-13** (prior baseline: a single "Landlord" role with no differentiated permission levels). |
+| Authorization enforcement | Every protected endpoint checks the caller's role and, for `landlord`, scopes all reads/writes to that landlord's own records; `super_admin` is not scoped and can act across landlord accounts. |
 
 This repository's confirmed strategy (`.ai-context/project_context.md`) is **JWT (access/refresh tokens)**, which satisfies the above.
 
@@ -160,6 +176,7 @@ Numbered for traceability (Section 18), preserved verbatim from the BRD:
 | R20 | A new landlord can self-register for an account from the Sign Up screen. |
 | R21 | The "Closed Shop Information" panel is shown on the Information tab only once a shop's status is Closed. *(client-side; backend must expose closure fields once status = Closed)* |
 | R22 | Submitting a payment validates the amount, records the transaction, and carries its details through to the confirmation receipt. |
+| R23 | *(Added 2026-09-13)* Every protected endpoint enforces role-based access: a `landlord` caller is restricted to records owned by their own account; a `super_admin` caller may access any landlord's records and administer landlord accounts/roles. |
 
 ## Validation Rules (Section 19)
 | Field Category | Examples | Rule |
@@ -185,7 +202,7 @@ Numbered for traceability (Section 18), preserved verbatim from the BRD:
 - Target platforms are Android and iOS only (mobile client — out of this repo's scope).
 - The product is single-tenant-per-landlord-account.
 - English is the only supported language.
-- "Landlord" is the sole user persona; tenants are data subjects, not app users.
+- "Landlord" and "Super-Admin" (added 2026-09-13) are the only app-user personas; tenants are data subjects, not app users.
 
 ## Open Questions
 1. What should the History screen show, distinct from Payment History?
@@ -196,6 +213,8 @@ Numbered for traceability (Section 18), preserved verbatim from the BRD:
 6. Should Delete Shop / Delete Room be recoverable (soft delete), and what happens to dependent agreements, bills, and payments?
 7. **[Backend-specific, not in source BRD]** What are the backend's non-functional targets (p95 latency, availability, RPO/RTO)? Not specified in the BRD — must be confirmed before being codified in `.ai-context/constitution.md`.
 8. **[Backend-specific, not in source BRD]** Deployment target is Unknown/TBD per `.ai-context/project_context.md` — confirm before first release.
+9. **[Added 2026-09-13]** The source BRD's screen inventory has no Super-Admin console/UI. Is a Super-Admin-facing client in scope for a future phase, or is Super-Admin a backend/API-only role for now (e.g. operated via direct API calls or an internal tool)?
+10. **[Added 2026-09-13]** Should Super-Admin actions (account creation, role changes, cross-landlord data access) be written to an audit trail? The BRD does not specify audit logging for admin actions.
 
 ## Acceptance Criteria
 Acceptance Criteria are elaborated at the spec level (Gate 1) for each business module as it is developed — see `.ai-context/specs/<feature-slug>.spec.md`, one per module in the Traceability Matrix below. This BRD provides the requirement baseline; it does not itself carry AC-level detail beyond the Business/Validation Rules already listed above.
@@ -219,6 +238,7 @@ Acceptance Criteria are elaborated at the spec level (Gate 1) for each business 
 | BRD-014 | Global rate configuration | Billing Configuration | Service Rate | Service Rate Config |
 | BRD-015 | Payment capture & receipt | Payments & History | Pay Now, Confirmation | Payment |
 | BRD-016 | Payment history | Payments & History | Payment History, History | Payment |
+| BRD-017 | Role-based access control | Access Control & Role Management | *(no client screens — admin/back-office function; Super-Admin console is not in the source BRD's screen inventory)* | Landlord, Super-Admin |
 
 ## Glossary
 | Term | Definition |
@@ -231,3 +251,5 @@ Acceptance Criteria are elaborated at the spec level (Gate 1) for each business 
 | Service Rate | Landlord-configured defaults: per-unit electric rate and late-rent-charge amount. |
 | OTP | One-time password used for identity/password-recovery verification. |
 | KPI | Key Performance Indicator — the summary metrics on the Home dashboard. |
+| Super-Admin | *(Added 2026-09-13)* Platform-level role with full CRUD access across every landlord's data plus landlord-account and role administration. |
+| RBAC | Role-Based Access Control — the fixed Super-Admin / Landlord permission model enforced on every protected endpoint. |
