@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rento - PR Review & SDD Lifecycle Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-yellow: #eab308;
+            --border-color: #334155;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2, h3 { color: var(--text-main); }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .status-rejected { background-color: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .status-approved { background-color: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .status-pending { background-color: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border-color); }
+        th { background-color: #0f172a; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Rento - PR Review & SDD Lifecycle Dashboard</h1>
+        
+        <div class="card">
+            <h2>Active Spec & Baseline Reviews</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Title</th>
+                        <th>Gate Level</th>
+                        <th>Assigned Reviewer</th>
+                        <th>Status</th>
+                        <th>Last Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>BRD-Baseline</code></td>
+                        <td>Project Requirement & Module Architecture Baseline</td>
+                        <td>Gate 0</td>
+                        <td>Supratim Jetty (supratim.jetty@intglobal.com)</td>
+                        <td><span class="status-badge status-rejected">Rejected</span></td>
+                        <td>2026-09-13 (Test BRD properly and send back)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>PR Review History Log</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Review Date</th>
+                        <th>Item ID</th>
+                        <th>Gate</th>
+                        <th>Reviewer Email</th>
+                        <th>Decision</th>
+                        <th>Feedback / Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026-09-13 00:08:00</td>
+                        <td><code>BRD-Baseline</code></td>
+                        <td>Gate 0</td>
+                        <td>supratim.jetty@intglobal.com</td>
+                        <td><span class="status-badge status-rejected">REJECTED</span></td>
+                        <td>"Test the BRD properly and send back again"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
