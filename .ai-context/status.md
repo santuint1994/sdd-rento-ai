@@ -11,7 +11,8 @@ _Last updated: 2026-09-13_
 ## Daily Execution Log
 
 ### 2026-09-13
-- **`gate-0-approval`**: Conducted formal Gate 0 PR Review for revised baseline `BRD-Baseline-v1.1` (BRD-001 through BRD-017 including Super-Admin RBAC amendment). Assigned reviewer Supratim Jetty (`supratim.jetty@intglobal.com`) granted **`Approved`** status. Feature spec drafting (`.spec.md`) is now unlocked. Created dedicated review record `GATE0-BRD-Baseline-v1.1-20260913-001915.md` and updated `dashboard.html`, `BRD.md`, `status.md`, and `prompt_history.md`.
+- **`architecture-approval`**: User formally confirmed approval of the updated Architecture ([`.ai-context/architecture.md`](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/architecture.md)) and Constitution ([`.ai-context/constitution.md`](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/constitution.md)) baseline.
+- **`gate-0-approval`**: Conducted formal Gate 0 PR Review for revised baseline `BRD-Baseline-v1.1` (BRD-001 through BRD-017 including Super-Admin RBAC amendment). Assigned reviewer Supratim Jetty (`supratim.jetty@intglobal.com`) granted **`Approved`** status. Created dedicated review record `GATE0-BRD-Baseline-v1.1-20260913-001915.md` and updated `dashboard.html`, `BRD.md`, `status.md`, and `prompt_history.md`.
 - **`gate-0-review`**: Conducted formal Gate 0 BRD & Module Architecture PR Review. Assigned reviewer Supratim Jetty (`supratim.jetty@intglobal.com`) marked `BRD-Baseline` as **`Rejected`** (*"Test the BRD properly and send back again"*). Created dedicated review record `GATE0-BRD-Baseline-20260913-000800.md` and updated `dashboard.html`, `BRD.md`, `status.md`, and `prompt_history.md`.
 
 ### 2026-09-12
