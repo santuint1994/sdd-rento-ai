@@ -13,6 +13,7 @@
 - `[BRD §31]` Payment amounts and payment records must be protected **in transit and at rest**.
 - `[BRD §31]` Every API request beyond authentication requires a valid session token (Section 22: Protected routes).
 - `[BRD §19]` Contact fields (email, phone, alternate phone) must be format-validated; phone numbers are digit-only and length-bound. Monetary fields must be positive numeric.
+- `[BRD §22, R23 — added 2026-09-13]` Every protected endpoint must enforce role-based access: a `landlord`-role caller is restricted to records owned by their own account; a `super_admin`-role caller is exempt from that scope. Do not rely on client-supplied IDs alone to determine scope — derive `landlordId` from the authenticated token, never from a request parameter/body.
 - Never hardcode secrets, API keys, or database credentials — read from environment variables (`process.env`), never committed (`.env` is git-ignored).
 - Avoid `eval()` or execution of arbitrary code.
 
@@ -21,6 +22,7 @@
 - Backend technology: Node.js + Express.
 - Database: PostgreSQL, accessed via Sequelize ORM.
 - `[BRD §21]` Core entities: Landlord, Shop, Room, Tenant, Agreement, Electric Bill, Payment, Service Rate Config. See `.ai-context/BRD.md` § Business Data Model.
+- `[BRD-017, added 2026-09-13]` Landlord entity carries a `role` attribute (`landlord` | `super_admin`); no separate top-level admin entity unless Gate 1 architecture review decides otherwise. See `.ai-context/architecture.md` § `access-control` module (proposed, pending Gate 1).
 - `[BRD §27]` The backend must expose the API surface listed in `.ai-context/BRD.md` § Backend API Contract.
 - No new datastore or major architectural shift may be introduced without a corresponding ADR under `.ai-context/decisions/`.
 

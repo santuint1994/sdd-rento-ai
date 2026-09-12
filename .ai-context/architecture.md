@@ -52,14 +52,16 @@ The BRD's 9 client-facing modules are grouped into fewer backend-owned modules w
 | `rooms` | Room Management | Independent CRUD lifecycle, no dependency on Shop | Room |
 | `billing` | Billing Configuration | Global Service Rate config + Electric Bill calculation form one cohesive billing concern | Electric Bill, Service Rate Config |
 | `payments` | Payments & History | Payment capture/history is a distinct concern from bill calculation, settles bills from either `shops` (room rent) or `billing` (electric) | Payment |
+| `access-control` | Access Control & Role Management (BRD-017, added 2026-09-13) | Landlord-account administration and role assignment (Super-Admin) is a cross-cutting concern distinct from any single business module — kept separate so authorization logic doesn't leak into `auth`/`account`. Provides the `landlord`-scoping vs `super_admin`-unscoped enforcement middleware consumed by every other module. | Landlord (role attribute) |
 
-Cross-module rule (Microservice Readiness, per `int-brd-ingestion` guidance): `payments` and `billing` reference `shops`/`rooms` by ID only, never via direct DB joins across module boundaries, so each could later be extracted independently.
+Cross-module rule (Microservice Readiness, per `int-brd-ingestion` guidance): `payments` and `billing` reference `shops`/`rooms` by ID only, never via direct DB joins across module boundaries, so each could later be extracted independently. `access-control` is consumed by every other module as shared authorization middleware, not as a data dependency — each module must apply its role-scoping check locally rather than trusting a pre-filtered result from `access-control`.
 
 **Open architectural question carried from the BRD (Section 35, Q3):** the BRD leaves it unclear whether Shop and Room are the same underlying rentable-unit entity or genuinely separate types. This proposal treats them as separate modules/entities (matching the BRD's separate CRUD screens and separate API paths `/shops` vs `/rooms`); reversing this would be a breaking architectural change requiring an ADR.
 
 ## Authentication & Security
 - JWT-based authentication (access/refresh tokens).
 - Secrets and credentials are read from environment variables only; never committed to source control.
+- **Authorization (added 2026-09-13, BRD-017):** every protected route applies a role-check middleware after authentication. A `landlord`-role token scopes all queries/writes to `WHERE landlordId = :callerId`; a `super_admin`-role token is exempt from that scope. This middleware lives in `access-control` (or `app/middleware/` if kept thin enough to avoid a dedicated module — to be settled at Gate 1) and is applied per-route, not assumed globally.
 
 ## Deployment
 - Target: Unknown / TBD. Update this section once a deployment target (Docker, AWS, etc.) is confirmed.
