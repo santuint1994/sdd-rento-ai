@@ -25,3 +25,23 @@
   - Logged the ingestion in `.ai-context/brd-change-log.md`.
   - Proposed (not yet Gate-1-approved) backend business module boundaries — `auth`, `account`, `dashboard`, `shops` (absorbing Tenant + Agreement as sub-resources), `rooms`, `billing`, `payments` — added to `.ai-context/architecture.md`. No `src/backend/modules/<name>/` folders were created; per the ingestion workflow, module folder generation is blocked until Gate 1 architecture approval.
   - Updated `.ai-context/project_context.md` BRD Status to reflect ingestion completion.
+
+## 2026-09-12 — PR Gate Workflow & Initial Spec Drafting
+- **Prompt:** `/pr-gate-workflow` / `continue`
+- **Outcome:** Executed PR Gate Workflow reviewer check. Verified reviewer identity (`Supratim`, `supratim.jetty@intglobal.com`). Authored feature spec `.ai-context/specs/auth.spec.md` (Landlord Authentication & Session Management) derived from BRD-001, BRD-002, BRD-003. Submitted `auth.spec.md` for Gate 1 peer review and updated `.ai-context/status.md`.
+
+## 2026-09-12 — Governance Correction & Gate 1 Architecture/BRD Submission
+- **Prompt:** User query regarding BRD approval before drafting specs.
+- **Outcome:** Acknowledged governance deviation. Correctly reverted premature feature spec `auth.spec.md`. Submitted the ingested BRD requirement baseline (`.ai-context/BRD.md`) and proposed backend business module architecture (`.ai-context/architecture.md`) for formal human Gate 1 Architecture / BRD Approval.
+
+## 2026-09-12 — Global PR Review Workflow Synchronization
+- **Prompt:** `check the updated work flow for pr review from the global skills and update accordingly`
+- **Outcome:** Checked global skills repository (`C:\Users\Supratim_Jetty\.gemini\config`). Synchronized updated PR Review / PR Gate Workflow and governance rules across `.agent/` and `.agents/skills/`:
+  - **Pre-Check Authorization**: `/pr-gate-workflow` now performs mandatory authorization pre-checks (`git config user.email` vs assigned reviewer roster) before prompting.
+  - **Unauthorized Access Handling**: If logged-in email does not match, Option 1 (Review Pending Specs) is completely skipped and restricted, with immediate display of high-priority unauthorized alert and direct routing to developer workspace.
+  - **Role-Based Listing**: Expanded listing support to cover Gate 0 (`BRD.md`), Gate 1 (`.spec.md`), Gate 2 (Code), or Multi-Role reviews.
+  - **Continuous Review Loop**: Automatically loops back to remaining pending assigned PR reviews upon completing a review.
+  - **Strict Gate 1 Rejection Block**: Enforced hard development block on specs marked `Rejected` or `Changes Requested` at Gate 1.
+  - Synchronized all 11 `.agent` control plane files and 7 `.agents/skills` skill files with 100% hash parity.
+
+

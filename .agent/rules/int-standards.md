@@ -27,8 +27,11 @@ You are assisting an engineering team at INT. Whenever you write, refactor, or s
 * Do not add any AI-specific configuration files (like .cursorrules or .copilotignore) outside of the .agent/ directory.
 
 ## 6. PR Gate Governance
-* Strictly enforce non-blocking parallel spec execution: Specs exist and progress independently.
-* Enforce reviewer detection upon `git pull`: Authenticated Git user must match assigned reviewer to approve/reject PR gates.
+* Strict Spec Generation Block before BRD Approval: Feature spec (`.spec.md`) drafting or generation is **STRICTLY PROHIBITED** until `.ai-context/BRD.md` is formally reviewed and granted `Approved` status via **Gate 0 BRD PR Review**. The agent MUST HALT and end turn upon presenting `.ai-context/BRD.md` for Gate 0 review.
+* Strictly enforce non-blocking parallel spec execution: Specs exist and progress independently once BRD Gate 0 is approved.
+* Gate 0 BRD PR Review: Dedicated BRD review gate (`.ai-context/pr_reviews/BRD-<timestamp>.md`) evaluating BRD completeness, scope boundaries, and business rules before any spec drafting begins.
+* Gate 1 Spec Peer Review: Gate 1 is a dedicated Spec Peer Review evaluating feature spec (`.spec.md`) alignment, API contracts, and acceptance criteria.
+* Enforce strict Git email matching before offering PR review options or allowing approvals: Authenticated Git user email (`git config user.email`) MUST match the assigned reviewer email roster configured in `project_context.md` / `constitution.md`. If the email does NOT match, **Option 1 (Review Pending Specs)** is **STRICTLY BLOCKED**, and any attempt to approve or reject a PR gate MUST be **REJECTED AND BLOCKED IMMEDIATELY**.
 * Enforce role separation: Pulling code does not grant approval rights.
 * Maintain Dashboard HTML as single source of truth for full PR review records, synchronized simultaneously with `.spec.md`, dedicated `.ai-context/pr_reviews/` record files, `.ai-context/status.md`, and `.ai-context/prompt_history.md`.
 * Scope restriction: Do not modify workflows before Spec Generation or after Gate 2 Approval.

@@ -17,23 +17,27 @@ description: Manage the end-to-end INT SDD feature development lifecycle, includ
 # Mandatory Lifecycle Flow
 
 ```text
-BRD (.ai-context/BRD.md)
+1. BRD Ingestion / Authoring (.ai-context/BRD.md)
        ↓
-1. Spec Authoring (.ai-context/specs/<feature-slug>.spec.md) [Parallel & Non-Blocking]
+2. Gate 0: BRD PR Review & Approval (Standardized BRD Review Template + 5-Artifact Sync)
        ↓
-2. Reviewer Detection / Selection & Decision Prompt (Review Pending Specs vs Work on Approved Specs)
+3. Spec Authoring (.ai-context/specs/<feature-slug>.spec.md) [Parallel & Non-Blocking]
        ↓
-3. Gate 1 Review & Approval (Standardized Gate 1 Template + Git Identity Validation)
+4. Reviewer Detection / Selection & Decision Prompt (Review Pending Specs vs Work on Approved Specs)
        ↓
-4. Developer Work Selection ("Which approved spec would you like to start development on?")
+5. Gate 1: Spec PR Review & Approval (Standardized Gate 1 Template + Git Identity Validation)
        ↓
-5. Plan (.ai-context/plans/<slug>.plan.md) & Tasks (.ai-context/tasks/<slug>.tasks.md) Breakdown
+6. Developer Work Selection ("Which approved spec would you like to start development on?")
        ↓
-6. Full Development Phase: Test-First (RED) ──► Implementation (GREEN) ──► Full Test Suite Verification (PASS)
+7. Pre-Development PR Review Check & Developer Notification
        ↓
-7. Gate 2 Review & Approval (Standardized Gate 2 Template + Git Identity Validation + Dashboard Sync)
+8. Plan (.ai-context/plans/<slug>.plan.md), Tasks (.tasks.md), Test Cases (.test_cases.md) Breakdown
        ↓
-8. EXISTING DOWNSTREAM WORKFLOW (Release Management / Release Note / CR Management / Hot Fix Management)
+9. Full Development Phase: Test-First (RED) ──► Implementation (GREEN) ──► Full Test Suite Verification (PASS)
+       ↓
+10. Gate 2: Code PR Review & Approval (Standardized Gate 2 Template + Git Identity Validation + Dashboard Sync)
+       ↓
+11. EXISTING DOWNSTREAM WORKFLOW (Release Management / Release Note / CR Management / Hot Fix Management)
 ```
 
 ## 1. Non-Blocking Parallel Spec Generation & State Machine
@@ -245,12 +249,22 @@ The system enforces strict role separation:
 > Being assigned as a PR reviewer does NOT prevent a user from developing approved specs.
 > Working on an approved spec does NOT automatically make the user the PR reviewer for that spec.
 
-### Git-Based Identity Validation Rule
-When project code is available in Git, the system compares:
-- **Authenticated Git/System User** (`git config user.name`, `git config user.email`, User ID)
-- against **Assigned Reviewer Roster for Specific Spec + Specific PR Gate**
+### Git-Based Identity Validation & Approval Restriction Rule
+When project code is available in Git, the system performs **Strict Pre-Execution Email Matching**:
 
-Only matching users are permitted to perform official `Approve`, `Reject`, or `Changes Requested` actions.
+1. **Pre-Execution Check**:
+   The system compares authenticated Git user email (`git config user.email`) against the **Assigned Reviewer Email Roster** configured for the target PR gate in `.ai-context/project_context.md` and `.ai-context/constitution.md`.
+
+2. **Access & Approval Enforcement**:
+   - If the user's Git email (`git config user.email`) matches an assigned reviewer email for that PR gate, the user is granted PR review access.
+   - If the user's Git email does **NOT** match an assigned reviewer email (e.g. logged in as `supratim.jetty@intglobal.com` but assigned reviewer is `sjetty786@gmail.com`):
+     - **Option 1 (Review Pending Specs)** is **STRICTLY BLOCKED AND RESTRICTED**.
+     - The system displays the high-priority restriction alert:
+       > 🛑 **PR REVIEW RESTRICTED — EMAIL MISMATCH**
+       > - **Logged-in Git Email:** `supratim.jetty@intglobal.com`
+       > - **Assigned Reviewer Email:** `sjetty786@gmail.com`
+       > 🔒 **Access Blocked**: You cannot perform PR reviews or approve PR gates because your logged-in Git email does not match the assigned PR reviewer email.
+     - Any manual attempt to submit an `Approve`, `Reject`, or `Changes Requested` decision is **HARD-BLOCKED AND REJECTED**.
 
 ### Local-Only Scenario Rule
 If the project has not yet been pushed to Git and exists only locally:
@@ -283,9 +297,9 @@ If **Work on Approved Specs** is selected:
 
 ---
 
-# 6. Standardized Gate 1 Review Template
+# 6. Standardized Gate 1 Review Template (Spec & BRD Peer Review)
 
-Every Gate 1 review MUST utilize the standardized 22-field Gate 1 Review Template (saved under `.ai-context/pr_reviews/GATE1-<slug>-<timestamp>.md`):
+Every Gate 1 review MUST evaluate BOTH the Feature Spec (`.spec.md`) and the linked BRD Requirement (`.ai-context/BRD.md`). It MUST utilize the standardized 22-field Gate 1 Review Template (saved under `.ai-context/pr_reviews/GATE1-<slug>-<timestamp>.md`):
 
 ```markdown
 # Gate 1 PR Review: <Spec ID> — <Spec Name>
@@ -294,6 +308,7 @@ Every Gate 1 review MUST utilize the standardized 22-field Gate 1 Review Templat
 - **Project Name:** <Project Name>
 - **Spec ID:** <feature-slug>
 - **Spec Name:** <Spec Name>
+- **Linked BRD Requirement:** .ai-context/BRD.md#<BRD-ID> (<BRD Requirement Title>)
 - **Developer:** <Developer Name / Email>
 - **Assigned Reviewer(s):** <Assigned Reviewer Roster>
 - **Reviewer Name:** <Reviewer Name>
@@ -303,20 +318,20 @@ Every Gate 1 review MUST utilize the standardized 22-field Gate 1 Review Templat
 - **Review Record File:** .ai-context/pr_reviews/GATE1-<feature-slug>-<YYYYMMDD-HHMMSS>.md
 
 ## Review Criteria Evaluation (Q&A Results)
-1. **Requirement Completeness:** Passed | Needs Improvement | Failed
-2. **Requirement Understanding:** Passed | Needs Improvement | Failed
-3. **Functional Scope:** Passed | Needs Improvement | Failed
-4. **Technical Approach/Design:** Passed | Needs Improvement | Failed
-5. **Business Rules:** Passed | Needs Improvement | Failed
-6. **Validations:** Passed | Needs Improvement | Failed
-7. **Dependencies:** Passed | Needs Improvement | Failed
-8. **Assumptions:** Passed | Needs Improvement | Failed
-9. **Edge Cases:** Passed | Needs Improvement | Failed
-10. **Acceptance Criteria:** Passed | Needs Improvement | Failed
-11. **Development Readiness:** Ready | Not Ready
+1. **BRD Traceability & Alignment:** Passed | Needs Improvement | Failed
+2. **Requirement Completeness:** Passed | Needs Improvement | Failed
+3. **Requirement Understanding:** Passed | Needs Improvement | Failed
+4. **Functional Scope:** Passed | Needs Improvement | Failed
+5. **Technical Approach/Design:** Passed | Needs Improvement | Failed
+6. **Business Rules:** Passed | Needs Improvement | Failed
+7. **Validations:** Passed | Needs Improvement | Failed
+8. **Dependencies:** Passed | Needs Improvement | Failed
+9. **Assumptions:** Passed | Needs Improvement | Failed
+10. **Edge Cases:** Passed | Needs Improvement | Failed
+11. **Acceptance Criteria & Readiness:** Ready | Not Ready
 
 ## Review Summary & Feedback
-- **Review Description:** <High-level summary of review findings and scope assessment>
+- **Review Description:** <High-level summary of review findings, BRD scope alignment, and assessment>
 - **Review Comments:** <Detailed line-item feedback, requested changes, or approval notes>
 ```
 
@@ -514,15 +529,18 @@ Draft | In Peer Review | Changes Requested | Approved | Plan Drafted | Plan Revi
 
 ---
 
-# Gate 1 — Spec Peer Review
+# Gate 1 — Spec & BRD Peer Review
 
-Gate 1 is a formal Spec Peer Review before design or coding begins.
+Gate 1 is a formal **Spec & BRD Peer Review** conducted before technical planning, design, or coding begins.
+
+During Gate 1 review, the reviewer evaluates BOTH the **Feature Spec (`.ai-context/specs/<slug>.spec.md`)** AND the linked **BRD Requirement (`.ai-context/BRD.md#BRD-NNN`)** to ensure complete alignment, business intent satisfaction, and zero unbacked scope creation.
 
 ## Gate 1 Validation Checklist
 - [ ] Reviewer is different from the author.
 - [ ] Reviewer identity verified: Gate 1 approval MUST be performed and pushed to Git by the **Project Manager (PM)** or **Technical Lead (TL)**.
 - [ ] Git commit/push for Gate 1 approval (`.ai-context/specs/<slug>.spec.md`) matches PM/TL Git identity (`user.email`). Developers MUST NOT push Gate 1 approvals.
-- [ ] Intent is one unambiguous paragraph.
+- [ ] **BRD Requirement Traceability Verified**: Feature spec maps 1-to-1 with an authoritative requirement in `.ai-context/BRD.md`.
+- [ ] Intent is one unambiguous paragraph matching BRD business objective.
 - [ ] Every Acceptance Criterion uses Given / When / Then format and has a unique ID.
 - [ ] API Contract defines request payload, success response, and exception table (if API surface exists).
 - [ ] Explicitly Out of Scope section is present.

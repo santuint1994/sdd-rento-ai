@@ -34,36 +34,89 @@ When a user pulls code or resumes an agent session:
    > 📌 **Pending PR Reviews**: You have **N pending reviews** assigned to you.
    > *Type **`/pr-gate-workflow`** to launch the reviewer workspace, or proceed with your command.*
 
-### B. On-Demand Execution (`/pr-gate-workflow`)
-When the user types **`/pr-gate-workflow`** (or selects a PR review prompt), the agent presents the Decision Prompt:
+### B. Mandatory Pre-Check Authorization Workflow (`/pr-gate-workflow`)
 
-> **"You are assigned as a PR reviewer. What would you like to do?"**
+When `/pr-gate-workflow` is triggered, the system MUST execute **Mandatory Pre-Check Authorization FIRST** before asking any questions:
+
+```text
+               1. Execute /pr-gate-workflow
+                           │
+                           ▼
+          2. Check git config user.email
+                           │
+                           ▼
+   Compare against Assigned Reviewer Roster (project_context.md)
+                           │
+             ┌─────────────┴─────────────┐
+             ▼                           ▼
+    [ EMAILS MATCH ]            [ EMAILS DO NOT MATCH ]
+             │                           │
+             ▼                           ▼
+  User IS Authorized Reviewer   User IS NOT Authorized Reviewer
+             │                           │
+             ▼                           ▼
+  Show Reviewer Questions:      1. Display Unauthorized Alert:
+  - Option 1: Review Specs         "🛑 UNAUTHORIZED FOR PR REVIEW:
+  - Option 2: Work on Specs         Your email (<logged_in_email>) does
+                                    not match assigned reviewer (<assigned_email>)."
+                                2. SKIP Option 1 completely!
+                                3. DIRECTLY route to Developer Selection:
+                                   "Which approved spec would you like
+                                    to start development on?"
+```
+
+#### Step 1: Execute Authorization Pre-Check FIRST
+Inspect `git config user.email` and compare against assigned reviewer emails (`Gate 0 Reviewers`, `Gate 1 Reviewers`, `Gate 2 Reviewers`) configured in `.ai-context/project_context.md` and `.ai-context/constitution.md`.
+
+#### Step 2A: If Email MATCHES Assigned Reviewer Roster
+The user is confirmed as an **Authorized Reviewer**. Present the Reviewer Decision Prompt:
+> **"You are logged in as <User Name> (<Email>). You are an authorized PR Reviewer. What would you like to do?"**
 > - **[ Option 1 — Review Pending Specs ]**
 > - **[ Option 2 — Work on Approved Specs ]**
+
+#### Step 2B: If Email DOES NOT MATCH Assigned Reviewer Roster
+The user is **UNAUTHORIZED FOR PR REVIEW**.
+1. **DO NOT** display Option 1 (Review Pending Specs).
+2. **DO NOT** ask reviewer decision questions.
+3. Display the high-priority Unauthorized Alert:
+   > 🛑 **UNAUTHORIZED FOR PR REVIEW**
+   > - **Logged-in Git Email:** `<logged_in_email>` (e.g. `supratim.jetty@intglobal.com`)
+   > - **Assigned Reviewer Email:** `<assigned_email>` (e.g. `sjetty786@gmail.com`)
+   >
+   > 🔒 **Access Restricted**: You are not authorized to perform PR reviews for this project because your logged-in Git email (`<logged_in_email>`) does not match the assigned PR reviewer email (`<assigned_email>`).
+4. **Bypass Reviewer Prompt & Direct Immediately to Development**:
+   > 💻 **Directing to Developer Workspace...**
+   > **"Which approved spec would you like to start development on?"**
+   > [Displays roster of eligible Gate 1 approved specs]
+
+4. **Hard Approval Guard**:
+   Any attempt to submit an `Approve`, `Reject`, or `Changes Requested` decision by a user whose email does not match the assigned reviewer roster MUST be **REJECTED AND BLOCKED IMMEDIATELY**.
 
 ---
 
 ## 3. Option 1 — Review Pending Specs Protocol (Complete Lifecycle)
 
-1. **Role-Based Spec Filtering & Listing**:
-   The agent queries `.ai-context/specs/` and `.ai-context/dashboard.html` for specs waiting for review where current user identity matches the assigned reviewer roster:
+1. **Role-Based Spec & Artifact Filtering & Listing**:
+   The agent queries `.ai-context/BRD.md`, `.ai-context/specs/`, and `.ai-context/dashboard.html` for artifacts waiting for review where current user identity matches the assigned reviewer roster:
+   - **BRD Approver (Gate 0)**: Shows pending BRD PR Reviews (`.ai-context/BRD.md` status = `Pending Review`).
    - **Gate 1 Approver**: Shows pending Gate 1 Spec Peer Reviews (`In Peer Review`).
    - **Gate 2 Approver**: Shows pending Gate 2 Code Reviews (`In QA`).
-   - **Dual Approver (Gate 1 & Gate 2)**: Shows BOTH Gate 1 and Gate 2 pending reviewals in the listing!
+   - **Multi-Role Approver**: Shows ALL assigned pending reviewals (BRD, Gate 1 Specs, Gate 2 Code) in the same listing!
 
-   > **"Which spec would you like to review?"**
+   > **"Which item would you like to review?"**
 
-   | # | Spec ID | Spec Title | Gate Level | Assigned Role | Developer | Current Status |
+   | # | Item / Spec ID | Title | Gate Level | Assigned Role | Author/Dev | Current Status |
    |---|---|---|---|---|---|---|
-   | 1 | `auth-service` | User Authentication | **Gate 1** | Gate 1 Reviewer | Dev A | Pending Spec Review |
-   | 2 | `payment-gateway` | Payment Gateway | **Gate 2** | Gate 2 Reviewer | Dev B | Pending Code Review |
-   | 3 | `order-engine` | Order Processing | **Gate 1 & Gate 2** | Dual Reviewer | Dev C | Pending Spec Review |
+   | 1 | `BRD-Baseline` | Project Requirement Baseline | **Gate 0** | BRD Reviewer | PM / Lead | Pending BRD Review |
+   | 2 | `auth-service` | User Authentication Spec | **Gate 1** | Gate 1 Reviewer | Dev A | Pending Spec Review |
+   | 3 | `payment-gateway` | Payment Gateway Code | **Gate 2** | Gate 2 Reviewer | Dev B | Pending Code Review |
+   | 4 | `order-engine` | Order Processing Spec | **Gate 1 & Gate 2** | Dual Reviewer | Dev C | Pending Spec Review |
 
-2. **Spec-Oriented Interactive Q&A Review Process**:
+2. **Spec & BRD-Oriented Interactive Q&A Review Process**:
    When the reviewer selects a spec:
-   - **Step A — Spec Orientation Summary**: Agent displays feature Intent, Linked BRD, Acceptance Criteria, and (for Gate 2) code diff summary & test suite results.
-   - **Step B — Interactive Q&A Criteria Evaluation**: Agent collects criteria scores across the 11 Gate 1 or Gate 2 metrics.
-   - **Step C — Review Description**: Agent prompts for high-level findings summary.
+   - **Step A — Spec & BRD Orientation Summary**: Agent displays feature Intent, Linked BRD Requirement ID & Text (`.ai-context/BRD.md#BRD-NNN`), Acceptance Criteria, and (for Gate 2) code diff summary & test suite results.
+   - **Step B — Interactive Q&A Criteria Evaluation**: Agent collects criteria scores across the 11 Gate 1 metrics (including **BRD Traceability & Alignment**) or Gate 2 metrics.
+   - **Step C — Review Description**: Agent prompts for high-level findings summary and BRD scope assessment.
    - **Step D — Review Comments**: Agent prompts for detailed line-item notes or requested changes.
    - **Step E — Final Decision**: Agent prompts for decision: `Approve`, `Reject`, or `Changes Requested`.
 
