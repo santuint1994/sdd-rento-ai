@@ -5,7 +5,8 @@
 - **Location:** `docs/Rento BRD.pdf`
 - **Status:** Single authoritative source document (no competing versions found under `docs/`).
 ## Gate Approvals & History
-- **2026-09-13 (Gate 0 BRD Review):** **REJECTED** by Supratim Jetty (`supratim.jetty@intglobal.com`). Feedback: *"Test the BRD properly and send back again"*. See dedicated review record: [GATE0-BRD-Baseline-20260913-000800.md](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/pr_reviews/GATE0-BRD-Baseline-20260913-000800.md).
+- **2026-09-13 (Gate 0 BRD Review — BRD-Baseline-v1.1):** **APPROVED** by Supratim Jetty (`supratim.jetty@intglobal.com`). Feedback: *"Revised BRD baseline v1.1 and 7 backend business module boundaries (including Super-Admin RBAC amendment) formally approved at Gate 0."*. See dedicated review record: [GATE0-BRD-Baseline-v1.1-20260913-001915.md](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/pr_reviews/GATE0-BRD-Baseline-v1.1-20260913-001915.md).
+- **2026-09-13 (Gate 0 BRD Review — BRD-Baseline):** **REJECTED** by Supratim Jetty (`supratim.jetty@intglobal.com`). Feedback: *"Test the BRD properly and send back again"*. See dedicated review record: [GATE0-BRD-Baseline-20260913-000800.md](file:///c:/Users/Supratim_Jetty/Desktop/office%20projects/AI_Projects/sdd-rento-ai/.ai-context/pr_reviews/GATE0-BRD-Baseline-20260913-000800.md).
 - **2026-09-13 (BRD Amendment — Role Management):** Added Super-Admin role and role-based access control at stakeholder request. This requirement is **not present in the source document** (`docs/Rento BRD.pdf`); it is a confirmed baseline amendment pending inclusion in a future client BRD revision. See [brd-change-log.md](brd-change-log.md) for the full delta and impact analysis. This change requires Gate 1 re-review before any dependent specs/architecture proceed.
 
 ## Objective
